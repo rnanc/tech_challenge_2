@@ -3,29 +3,23 @@ from tkinter import ttk
 import random
 import time
 import matplotlib.pyplot as plt
+import csv
 
 # ------------------------------
 # Base de dados de modelos 3D
 # ------------------------------
-modelos = [
-    {"nome": "Suporte de celular", "qtd_filamento": 45, "tempo": 2, "cor": "Preto", "preco_kg": 120},
-    {"nome": "Vasinho decorativo", "qtd_filamento": 80, "tempo": 4, "cor": "Branco", "preco_kg": 125},
-    {"nome": "Miniatura de dragão", "qtd_filamento": 35, "tempo": 3, "cor": "Dourado", "preco_kg": 150},
-    {"nome": "Organizador de cabos", "qtd_filamento": 50, "tempo": 3.5, "cor": "Cinza", "preco_kg": 110},
-    {"nome": "Porta-lápis", "qtd_filamento": 70, "tempo": 3.5, "cor": "Verde", "preco_kg": 137},
-    {"nome": "Suporte para fone", "qtd_filamento": 110, "tempo": 5.5, "cor": "Laranja", "preco_kg": 135},
-    {"nome": "Mini vaso autoirrigável", "qtd_filamento": 120, "tempo": 6, "cor": "Verde musgo", "preco_kg": 120},
-    {"nome": "Quebra-cabeça 3D", "qtd_filamento": 20, "tempo": 1.5, "cor": "Multicolorido", "preco_kg": 180},
-    {"nome": "Estatueta decorativa", "qtd_filamento": 150, "tempo": 7, "cor": "Bronze", "preco_kg": 135},
-    {"nome": "Caixa organizadora pequena", "qtd_filamento": 90, "tempo": 4, "cor": "Branco gelo", "preco_kg": 127},
-    {"nome": "Suporte de parede para escovas", "qtd_filamento": 25, "tempo": 1.2, "cor": "Cinza claro", "preco_kg": 123},
-    {"nome": "Gatilho adaptador para spray", "qtd_filamento": 38, "tempo": 2.5, "cor": "Preto fosco", "preco_kg": 120},
-    {"nome": "Mini suporte para notebook", "qtd_filamento": 100, "tempo": 5, "cor": "Verde oliva", "preco_kg": 135},
-    {"nome": "Dispenser para álcool gel", "qtd_filamento": 130, "tempo": 6.5, "cor": "Transparente", "preco_kg": 120},
-    {"nome": "Torre de aprendizado infantil", "qtd_filamento": 180, "tempo": 9, "cor": "Madeira natural", "preco_kg": 180},
-    {"nome": "Conjunto de ganchos multifuncionais", "qtd_filamento": 60, "tempo": 3, "cor": "Amarelo", "preco_kg": 132},
-    {"nome": "Suporte de tomada rotativo", "qtd_filamento": 45, "tempo": 2.8, "cor": "Preto", "preco_kg": 120}
-]
+modelos = []
+with open("modelos_3d.csv", newline='', encoding='utf-8') as csvfile:
+    leitor = csv.DictReader(csvfile)
+    for linha in leitor:
+        modelos.append({
+            "nome": linha["nome"],
+            "qtd_filamento": int(linha["qtd_filamento"]),
+            "tempo": float(linha["tempo"]),
+            "cor": linha["cor"],
+            "preco_kg": float(linha["preco_kg"])
+        })
+
 
 # ------------------------------
 # Função de fitness
@@ -74,7 +68,7 @@ class InterfaceGenetica:
         self.root = root
         self.root.title("Algoritmo Genético - Impressão 3D")
         self.geracoes = 1000
-        self.populacao = gerar_populacao(10)
+        self.populacao = gerar_populacao(100)
         self.pontuacoes_por_geracao = []
 
         self.label_titulo = ttk.Label(root, text="Evolução Genética de Modelos 3D", font=("Arial", 14))
